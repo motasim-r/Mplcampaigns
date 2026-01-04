@@ -1,6 +1,6 @@
 import svgPaths from "../../imports/svg-lfxnmi0o8i";
-import { useState } from "react";
-import { ShoppingCart, CreditCard, Clock, MessageSquare, Phone, Mail, Edit2, XCircle } from 'lucide-react';
+import { useEffect, useRef, useState } from "react";
+import { ShoppingCart, CreditCard, Clock, MessageSquare, Phone, Mail, Edit2, XCircle, Search, MoreVertical, Zap, ChevronLeft, ChevronRight } from 'lucide-react';
 
 // Reusable components from the Dashboard
 function Logo() {
@@ -50,7 +50,10 @@ function GlowToggle({ enabled, label, onToggle }: GlowToggleProps) {
       role="switch"
       aria-checked={enabled}
       aria-label={label}
-      onClick={onToggle}
+      onClick={(event) => {
+        event.stopPropagation();
+        onToggle();
+      }}
       className={`inline-flex h-6 w-11 items-center rounded-full border p-[2px] transition-all duration-200 ${
         enabled
           ? "justify-end bg-[#0f1a12] border-[#d8fe91]/60 shadow-[0_0_12px_rgba(216,254,145,0.35)]"
@@ -67,6 +70,146 @@ function GlowToggle({ enabled, label, onToggle }: GlowToggleProps) {
     </button>
   );
 }
+
+type MiniToggleProps = {
+  enabled: boolean;
+  label: string;
+  onToggle: () => void;
+};
+
+function MiniToggle({ enabled, label, onToggle }: MiniToggleProps) {
+  return (
+    <button
+      type="button"
+      role="switch"
+      aria-checked={enabled}
+      aria-label={label}
+      onClick={(event) => {
+        event.stopPropagation();
+        onToggle();
+      }}
+      className={`inline-flex h-5 w-9 items-center rounded-full border p-[2px] transition-all duration-200 ${
+        enabled
+          ? "justify-end bg-[#0f1a12] border-[#d8fe91]/60 shadow-[0_0_10px_rgba(216,254,145,0.35)]"
+          : "justify-start bg-[#121212] border-[#2a2a2a] shadow-[0_0_6px_rgba(82,82,82,0.2)]"
+      }`}
+    >
+      <span
+        className={`h-3.5 w-3.5 rounded-full transition-all duration-200 ${
+          enabled
+            ? "bg-[#d8fe91] shadow-[0_0_6px_rgba(216,254,145,0.7)]"
+            : "bg-[#525252] shadow-[0_0_6px_rgba(115,115,115,0.35)]"
+        }`}
+      />
+    </button>
+  );
+}
+
+type CampaignKey = "cart" | "checkout";
+type CampaignStatus = "Live" | "Paused" | "Completed";
+type CampaignChannel = "email" | "sms" | "call";
+type CampaignRow = {
+  id: string;
+  name: string;
+  date: string;
+  channels: CampaignChannel[];
+  progress: number | null;
+  progressColor?: string;
+  status: CampaignStatus;
+  enabled: boolean;
+  spark?: boolean;
+};
+
+const initialCampaignRows: CampaignRow[] = [
+  {
+    id: "email-add-cart",
+    name: "email add to cart Campaign ...",
+    date: "Dec 16, 2025 at 02:09 pm",
+    channels: ["email"],
+    progress: null,
+    status: "Live",
+    enabled: true,
+  },
+  {
+    id: "autosend-test",
+    name: "autosend test Campaign - 12...",
+    date: "Dec 16, 2025 at 01:31 pm",
+    channels: ["email"],
+    progress: 60,
+    progressColor: "bg-[#d8fe91]",
+    status: "Paused",
+    enabled: false,
+    spark: true,
+  },
+  {
+    id: "email-add-cart-30sec",
+    name: "Email - Add to Cart - 30sec...",
+    date: "Dec 12, 2025 at 09:00 pm",
+    channels: ["email"],
+    progress: null,
+    status: "Paused",
+    enabled: false,
+  },
+  {
+    id: "call-campaign",
+    name: "call Campaign - 12/12/2025",
+    date: "Dec 12, 2025 at 06:57 pm",
+    channels: ["call"],
+    progress: null,
+    status: "Paused",
+    enabled: false,
+  },
+  {
+    id: "sms-test",
+    name: "SMS test Campaign - 12/12/2025",
+    date: "Dec 12, 2025 at 05:46 pm",
+    channels: ["sms"],
+    progress: 100,
+    progressColor: "bg-[#d8fe91]",
+    status: "Completed",
+    enabled: true,
+  },
+  {
+    id: "untitled-campaign",
+    name: "Untitled Campaign - 12/12/2025",
+    date: "Dec 12, 2025 at 05:00 pm",
+    channels: ["sms", "email", "call"],
+    progress: 71,
+    progressColor: "bg-[#d8fe91]",
+    status: "Paused",
+    enabled: false,
+    spark: true,
+  },
+  {
+    id: "view-item-email",
+    name: "view item - email - Campaign...",
+    date: "Dec 12, 2025 at 04:48 pm",
+    channels: ["email"],
+    progress: null,
+    status: "Paused",
+    enabled: false,
+  },
+  {
+    id: "winback-holiday",
+    name: "Winback Holiday Campaign",
+    date: "Dec 11, 2025 at 07:10 pm",
+    channels: ["sms"],
+    progress: 42,
+    progressColor: "bg-[#10b981]",
+    status: "Live",
+    enabled: true,
+  },
+  {
+    id: "post-purchase",
+    name: "Post-purchase Nudge Campaign",
+    date: "Dec 11, 2025 at 05:22 pm",
+    channels: ["email"],
+    progress: 28,
+    progressColor: "bg-[#f59e0b]",
+    status: "Paused",
+    enabled: false,
+  },
+];
 
 function SidebarSidebarMenuSubItem10({ children, additionalClassNames = "" }: React.PropsWithChildren<{ additionalClassNames?: string }>) {
   return (
@@ -421,6 +564,46 @@ function Sidebar() {
 export default function CampaignsPage() {
   const [isCartActive, setIsCartActive] = useState(true);
   const [isCheckoutActive, setIsCheckoutActive] = useState(false);
+  const [selectedCampaign, setSelectedCampaign] = useState<CampaignKey | null>(null);
+  const detailRef = useRef<HTMLDivElement | null>(null);
+  const [campaignRows, setCampaignRows] = useState<CampaignRow[]>(() => initialCampaignRows);
+
+  useEffect(() => {
+    if (selectedCampaign && detailRef.current) {
+      detailRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [selectedCampaign]);
+
+  const handleCampaignSelect = (campaign: CampaignKey) => {
+    setSelectedCampaign((current) => (current === campaign ? null : campaign));
+  };
+  const handleRowToggle = (rowId: string) => {
+    setCampaignRows((rows) =>
+      rows.map((row) =>
+        row.id === rowId
+          ? {
+              ...row,
+              enabled: !row.enabled,
+              status: row.status === "Completed" ? row.status : row.enabled ? "Paused" : "Live",
+            }
+          : row
+      )
+    );
+  };
+  const isDetailVisible = selectedCampaign !== null;
+  const isCheckoutDetail = selectedCampaign === "checkout";
+  const detailIsActive = isCheckoutDetail ? isCheckoutActive : isCartActive;
+  const detailTitle = isCheckoutDetail ? "Checkout Recovery Agent" : "Cart Recovery Agent";
+  const detailDescription = isCheckoutDetail
+    ? "Recover checkout dropoffs with urgent outreach, timed nudges, and concise offer reminders that bring customers back quickly."
+    : "This AI agent monitors your store for abandoned carts and automatically reaches out to customers with personalized, behavior-aware messaging. It detects why customers abandoned (price sensitivity, distraction, or hesitation) and tailors the recovery approach accordingly.";
+  const detailAccentBg = isCheckoutDetail ? "bg-[#10b981]/10" : "bg-[#d8fe91]/10";
+  const detailAccentText = isCheckoutDetail ? "text-[#10b981]" : "text-[#d8fe91]";
+  const statusClasses: Record<CampaignStatus, string> = {
+    Live: "bg-[#d8fe91]/15 text-[#d8fe91] border-[#d8fe91]/40",
+    Paused: "bg-[#1f1b12] text-[#f59e0b] border-[#f59e0b]/40",
+    Completed: "bg-[#0f1a12] text-[#10b981] border-[#10b981]/40",
+  };
 
   return (
     <div className="bg-[#0a0a0a] min-h-screen">
@@ -453,7 +636,10 @@ export default function CampaignsPage() {
           {/* Campaign Cards Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6 max-w-[1280px]">
             {/* Cart Recovery Agent Card */}
-            <div className="bg-[#1a1a1a] border border-[rgba(255,255,255,0.1)] rounded-[4px] p-5 hover:border-[#d8fe91]/30 transition-colors cursor-pointer">
+            <div
+              className="bg-[#1a1a1a] border border-[rgba(255,255,255,0.1)] rounded-[4px] p-5 hover:border-[#d8fe91]/30 transition-colors cursor-pointer"
+              onClick={() => handleCampaignSelect("cart")}
+            >
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-[#d8fe91]/10 rounded-[4px] flex items-center justify-center">
@@ -505,13 +691,22 @@ export default function CampaignsPage() {
                   </p>
                 </div>
                 <div className="flex gap-1.5">
-                  <button className="w-7 h-7 rounded-[4px] bg-[#262626] hover:bg-[#333] flex items-center justify-center text-[#fafafa] transition-colors">
+                  <button
+                    className="w-7 h-7 rounded-[4px] bg-[#262626] hover:bg-[#333] flex items-center justify-center text-[#fafafa] transition-colors"
+                    onClick={(event) => event.stopPropagation()}
+                  >
                     <MessageSquare className="w-3.5 h-3.5" />
                   </button>
-                  <button className="w-7 h-7 rounded-[4px] bg-[#262626] hover:bg-[#333] flex items-center justify-center text-[#fafafa] transition-colors">
+                  <button
+                    className="w-7 h-7 rounded-[4px] bg-[#262626] hover:bg-[#333] flex items-center justify-center text-[#fafafa] transition-colors"
+                    onClick={(event) => event.stopPropagation()}
+                  >
                     <Phone className="w-3.5 h-3.5" />
                   </button>
-                  <button className="w-7 h-7 rounded-[4px] bg-[#262626] hover:bg-[#333] flex items-center justify-center text-[#fafafa] transition-colors">
+                  <button
+                    className="w-7 h-7 rounded-[4px] bg-[#262626] hover:bg-[#333] flex items-center justify-center text-[#fafafa] transition-colors"
+                    onClick={(event) => event.stopPropagation()}
+                  >
                     <Mail className="w-3.5 h-3.5" />
                   </button>
                 </div>
@@ -519,7 +714,10 @@ export default function CampaignsPage() {
             </div>
 
             {/* Checkout Recovery Agent Card */}
-            <div className="bg-[#1a1a1a] border border-[rgba(255,255,255,0.1)] rounded-[4px] p-5 hover:border-[#d8fe91]/30 transition-colors cursor-pointer">
+            <div
+              className="bg-[#1a1a1a] border border-[rgba(255,255,255,0.1)] rounded-[4px] p-5 hover:border-[#d8fe91]/30 transition-colors cursor-pointer"
+              onClick={() => handleCampaignSelect("checkout")}
+            >
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-[#10b981]/10 rounded-[4px] flex items-center justify-center">
@@ -562,48 +760,187 @@ export default function CampaignsPage() {
             </div>
           </div>
 
-          {/* Detailed Campaign View */}
-          <div className="bg-[#1a1a1a] border border-[rgba(255,255,255,0.1)] rounded-[4px] max-w-[1280px]">
-            {/* Header */}
-            <div className="p-6 border-b border-[rgba(255,255,255,0.05)]">
-              <div className="flex items-start justify-between">
-                <div className="flex items-center gap-3 flex-1">
-                  <div className="w-10 h-10 bg-[#d8fe91]/10 rounded-[4px] flex items-center justify-center shrink-0">
-                    <ShoppingCart className="w-5 h-5 text-[#d8fe91]" />
+          {/* Campaigns List */}
+          <div className="bg-[#151515] border border-[rgba(255,255,255,0.08)] rounded-[8px] max-w-[1280px] mb-6 overflow-hidden">
+            <div className="p-5 border-b border-[rgba(255,255,255,0.06)]">
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h3 className="text-[#fafafa] font-['Overused_Grotesk:SemiBold',sans-serif] text-[16px] leading-[24px]">
+                      Campaigns list
+                    </h3>
+                    <span className="bg-[#d8fe91]/20 text-[#d8fe91] text-[12px] font-['Overused_Grotesk:Medium',sans-serif] px-2.5 py-0.5 rounded-full">
+                      {campaignRows.length} Campaigns
+                    </span>
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1.5">
-                      <h2 className="text-[#fafafa] font-['Overused_Grotesk:SemiBold',sans-serif] text-[18px]">
-                        Cart Recovery Agent
-                      </h2>
-                      <div className="flex items-center gap-1.5">
-                        <div className={`w-1.5 h-1.5 rounded-full ${isCartActive ? "bg-[#10b981]" : "bg-[#525252]"}`}></div>
-                        <span
-                          className={`text-[12px] font-['Overused_Grotesk:Medium',sans-serif] ${
-                            isCartActive ? "text-[#10b981]" : "text-[#737373]"
-                          }`}
-                        >
-                          {isCartActive ? "Active" : "Paused"}
-                        </span>
-                      </div>
-                    </div>
-                    <p className="text-[#737373] text-[14px] font-['Overused_Grotesk:Regular',sans-serif] leading-[20px]">
-                      This AI agent monitors your store for abandoned carts and automatically reaches out to customers with personalized, behavior-aware messaging. It detects why customers abandoned (price sensitivity, distraction, or hesitation) and tailors the recovery approach accordingly.
-                    </p>
-                  </div>
-                </div>
-                <div className="flex gap-2 ml-4 shrink-0">
-                  <button className="h-[36px] px-4 border border-[rgba(255,255,255,0.1)] rounded-[4px] text-[#fafafa] hover:bg-[#262626] font-['Overused_Grotesk:Medium',sans-serif] text-[14px] transition-colors flex items-center gap-2">
-                    <Edit2 className="w-4 h-4" />
-                    Edit Agent
-                  </button>
-                  <button className="h-[36px] px-4 border border-[rgba(255,255,255,0.1)] rounded-[4px] text-[#ef4444] hover:bg-[#ef4444]/10 hover:border-[#ef4444]/30 font-['Overused_Grotesk:Medium',sans-serif] text-[14px] transition-colors flex items-center gap-2">
-                    <XCircle className="w-4 h-4" />
-                    Deactivate
-                  </button>
+                  <p className="text-[#737373] text-[14px] font-['Overused_Grotesk:Regular',sans-serif] leading-[20px] mt-1">
+                    Your launched campaigns all in one place.
+                  </p>
                 </div>
               </div>
             </div>
+
+            <div className="flex flex-wrap items-center justify-between gap-3 px-5 py-4 border-b border-[rgba(255,255,255,0.06)]">
+              <div className="flex items-center gap-2 bg-[#1a1a1a] border border-[rgba(255,255,255,0.08)] rounded-[8px] p-1">
+                <button type="button" className="px-3 py-1.5 rounded-[6px] bg-[#262626] text-[#fafafa] text-[13px] font-['Overused_Grotesk:Medium',sans-serif]">
+                  All
+                </button>
+                <button type="button" className="px-3 py-1.5 rounded-[6px] text-[#737373] text-[13px] font-['Overused_Grotesk:Medium',sans-serif] hover:text-[#fafafa] transition-colors">
+                  Live
+                </button>
+                <button type="button" className="px-3 py-1.5 rounded-[6px] text-[#737373] text-[13px] font-['Overused_Grotesk:Medium',sans-serif] hover:text-[#fafafa] transition-colors">
+                  Paused
+                </button>
+                <button type="button" className="px-3 py-1.5 rounded-[6px] text-[#737373] text-[13px] font-['Overused_Grotesk:Medium',sans-serif] hover:text-[#fafafa] transition-colors">
+                  Completed
+                </button>
+              </div>
+
+              <div className="flex items-center gap-2 bg-[#121212] border border-[rgba(255,255,255,0.08)] rounded-[8px] px-3 py-2 w-full max-w-[280px]">
+                <Search className="w-4 h-4 text-[#525252]" />
+                <input
+                  className="bg-transparent text-[#fafafa] text-[13px] font-['Overused_Grotesk:Regular',sans-serif] placeholder:text-[#525252] outline-none w-full"
+                  placeholder="Search..."
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-[minmax(240px,1.4fr)_120px_200px_120px_140px] gap-4 px-5 py-3 text-[#737373] text-[12px] font-['Overused_Grotesk:Medium',sans-serif] uppercase tracking-wide border-b border-[rgba(255,255,255,0.06)]">
+              <div>Campaign name</div>
+              <div>Channels</div>
+              <div>Progress</div>
+              <div>Status</div>
+              <div className="text-right">Actions</div>
+            </div>
+
+            <div>
+              {campaignRows.map((row) => (
+                <div
+                  key={row.id}
+                  className="grid grid-cols-[minmax(240px,1.4fr)_120px_200px_120px_140px] gap-4 px-5 py-4 items-center border-b border-[rgba(255,255,255,0.06)] last:border-b-0"
+                >
+                  <div className="flex items-center gap-3 min-w-0">
+                    <MiniToggle
+                      enabled={row.enabled}
+                      label={`Toggle ${row.name}`}
+                      onToggle={() => handleRowToggle(row.id)}
+                    />
+                    <div className="min-w-0">
+                      <p className="text-[#fafafa] text-[14px] font-['Overused_Grotesk:Medium',sans-serif] truncate">
+                        {row.name}
+                      </p>
+                      <p className="text-[#737373] text-[12px] font-['Overused_Grotesk:Regular',sans-serif] mt-1">
+                        {row.date}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2 text-[#737373]">
+                    {row.channels.map((channel) => {
+                      const Icon = channel === "email" ? Mail : channel === "sms" ? MessageSquare : Phone;
+                      return <Icon key={`${row.id}-${channel}`} className="w-4 h-4" />;
+                    })}
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    {row.progress === null ? (
+                      <span className="text-[#525252] text-[14px] font-['Overused_Grotesk:Medium',sans-serif]">—</span>
+                    ) : (
+                      <>
+                        <div className="flex-1 max-w-[160px] bg-[#262626] rounded-full h-1.5 overflow-hidden">
+                          <div
+                            className={`${row.progressColor ?? "bg-[#d8fe91]"} h-full rounded-full`}
+                            style={{ width: `${row.progress}%` }}
+                          />
+                        </div>
+                        <span className="text-[#a3a3a3] text-[12px] font-['Overused_Grotesk:Medium',sans-serif] flex items-center gap-1">
+                          {row.spark && <Zap className="w-3.5 h-3.5 text-[#f59e0b]" />}
+                          {row.progress}%
+                        </span>
+                      </>
+                    )}
+                  </div>
+
+                  <div>
+                    <span
+                      className={`inline-flex items-center rounded-full border px-2.5 py-1 text-[12px] font-['Overused_Grotesk:Medium',sans-serif] ${statusClasses[row.status]}`}
+                    >
+                      {row.status}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center justify-end gap-3">
+                    <button type="button" className="text-[#a3a3a3] text-[13px] font-['Overused_Grotesk:Medium',sans-serif] hover:text-[#fafafa] underline underline-offset-4 transition-colors">
+                      View details
+                    </button>
+                    <button type="button" className="w-8 h-8 rounded-[6px] border border-[rgba(255,255,255,0.08)] bg-[#1a1a1a] hover:bg-[#262626] flex items-center justify-center transition-colors">
+                      <MoreVertical className="w-4 h-4 text-[#737373]" />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="flex items-center justify-end gap-2 px-5 py-4">
+              <button type="button" className="w-8 h-8 rounded-[6px] border border-[rgba(255,255,255,0.08)] bg-[#1a1a1a] hover:bg-[#262626] flex items-center justify-center transition-colors">
+                <ChevronLeft className="w-4 h-4 text-[#737373]" />
+              </button>
+              <button type="button" className="w-8 h-8 rounded-[6px] border border-[#d8fe91]/40 bg-[#10140d] text-[#d8fe91] text-[13px] font-['Overused_Grotesk:Medium',sans-serif]">
+                1
+              </button>
+              <button type="button" className="w-8 h-8 rounded-[6px] border border-[rgba(255,255,255,0.08)] bg-[#1a1a1a] hover:bg-[#262626] flex items-center justify-center transition-colors">
+                <ChevronRight className="w-4 h-4 text-[#737373]" />
+              </button>
+            </div>
+          </div>
+
+          {/* Detailed Campaign View */}
+          {isDetailVisible && (
+            <div ref={detailRef} className="bg-[#1a1a1a] border border-[rgba(255,255,255,0.1)] rounded-[4px] max-w-[1280px]">
+              {/* Header */}
+              <div className="p-6 border-b border-[rgba(255,255,255,0.05)]">
+                <div className="flex items-start justify-between">
+                  <div className="flex items-center gap-3 flex-1">
+                    <div className={`w-10 h-10 ${detailAccentBg} rounded-[4px] flex items-center justify-center shrink-0`}>
+                      {isCheckoutDetail ? (
+                        <CreditCard className={`w-5 h-5 ${detailAccentText}`} />
+                      ) : (
+                        <ShoppingCart className={`w-5 h-5 ${detailAccentText}`} />
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1.5">
+                        <h2 className="text-[#fafafa] font-['Overused_Grotesk:SemiBold',sans-serif] text-[18px]">
+                          {detailTitle}
+                        </h2>
+                        <div className="flex items-center gap-1.5">
+                          <div className={`w-1.5 h-1.5 rounded-full ${detailIsActive ? "bg-[#10b981]" : "bg-[#525252]"}`}></div>
+                          <span
+                            className={`text-[12px] font-['Overused_Grotesk:Medium',sans-serif] ${
+                              detailIsActive ? "text-[#10b981]" : "text-[#737373]"
+                            }`}
+                          >
+                            {detailIsActive ? "Active" : "Paused"}
+                          </span>
+                        </div>
+                      </div>
+                      <p className="text-[#737373] text-[14px] font-['Overused_Grotesk:Regular',sans-serif] leading-[20px]">
+                        {detailDescription}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex gap-2 ml-4 shrink-0">
+                    <button className="h-[36px] px-4 border border-[rgba(255,255,255,0.1)] rounded-[4px] text-[#fafafa] hover:bg-[#262626] font-['Overused_Grotesk:Medium',sans-serif] text-[14px] transition-colors flex items-center gap-2">
+                      <Edit2 className="w-4 h-4" />
+                      Edit Agent
+                    </button>
+                    <button className="h-[36px] px-4 border border-[rgba(255,255,255,0.1)] rounded-[4px] text-[#ef4444] hover:bg-[#ef4444]/10 hover:border-[#ef4444]/30 font-['Overused_Grotesk:Medium',sans-serif] text-[14px] transition-colors flex items-center gap-2">
+                      <XCircle className="w-4 h-4" />
+                      Deactivate
+                    </button>
+                  </div>
+                </div>
+              </div>
 
             {/* Metrics */}
             <div className="grid grid-cols-3 gap-4 p-6 border-b border-[rgba(255,255,255,0.05)]">
@@ -752,6 +1089,7 @@ export default function CampaignsPage() {
               </div>
             </div>
           </div>
+          )}
         </div>
       </div>
     </div>
