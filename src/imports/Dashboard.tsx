@@ -25,12 +25,17 @@ function Wrapper2({ children }: React.PropsWithChildren<{}>) {
 }
 type Wrapper1Props = {
   additionalClassNames?: string;
+  viewBox?: string;
 };
 
-function Wrapper1({ children, additionalClassNames = "" }: React.PropsWithChildren<Wrapper1Props>) {
+function Wrapper1({
+  children,
+  additionalClassNames = "",
+  viewBox = "0 0 16 16",
+}: React.PropsWithChildren<Wrapper1Props>) {
   return (
     <div className={clsx("size-[16px]", additionalClassNames)}>
-      <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 16 16">
+      <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox={viewBox}>
         {children}
       </svg>
     </div>
@@ -159,7 +164,7 @@ function SidebarHeader() {
 
 function IconLayoutDashboard() {
   return (
-    <Wrapper1 additionalClassNames="relative shrink-0">
+    <Wrapper1 additionalClassNames="relative shrink-0" viewBox="0 0 24 24">
       <g clipPath="url(#clip0_1_6912)" id="Icon / LayoutDashboard">
         <g id="Vector">
           <path d={svgPaths.p13b4cd00} stroke="var(--stroke-0, #D8FE91)" strokeLinecap="round" strokeLinejoin="round" />
@@ -170,7 +175,7 @@ function IconLayoutDashboard() {
       </g>
       <defs>
         <clipPath id="clip0_1_6912">
-          <rect fill="white" height="16" width="16" />
+          <rect fill="white" height="24" width="24" />
         </clipPath>
       </defs>
     </Wrapper1>
@@ -207,13 +212,13 @@ function SidebarSidebarMenuItem() {
 
 function IconDatabaseZap() {
   return (
-    <Wrapper1 additionalClassNames="relative shrink-0">
+    <Wrapper1 additionalClassNames="relative shrink-0" viewBox="0 0 24 24">
       <g clipPath="url(#clip0_1_6909)" id="Icon / DatabaseZap">
         <path d={svgPaths.p39d46e80} id="Vector" stroke="var(--stroke-0, #FAFAFA)" strokeLinecap="round" strokeLinejoin="round" strokeOpacity="0.4" />
       </g>
       <defs>
         <clipPath id="clip0_1_6909">
-          <rect fill="white" height="16" width="16" />
+          <rect fill="white" height="24" width="24" />
         </clipPath>
       </defs>
     </Wrapper1>
@@ -231,13 +236,13 @@ function SidebarSidebarMenuSubItem1() {
 
 function IconBarChart() {
   return (
-    <Wrapper1 additionalClassNames="relative shrink-0">
+    <Wrapper1 additionalClassNames="relative shrink-0" viewBox="0 0 24 24">
       <g clipPath="url(#clip0_1_6900)" id="Icon / BarChart">
         <path d="M12 20V10M18 20V4M6 20V16" id="Vector" stroke="var(--stroke-0, #FAFAFA)" strokeLinecap="round" strokeLinejoin="round" strokeOpacity="0.4" />
       </g>
       <defs>
         <clipPath id="clip0_1_6900">
-          <rect fill="white" height="16" width="16" />
+          <rect fill="white" height="24" width="24" />
         </clipPath>
       </defs>
     </Wrapper1>
@@ -255,13 +260,13 @@ function SidebarSidebarMenuSubItem2() {
 
 function IconUsersRound() {
   return (
-    <Wrapper1 additionalClassNames="relative shrink-0">
+    <Wrapper1 additionalClassNames="relative shrink-0" viewBox="0 0 24 24">
       <g clipPath="url(#clip0_1_6897)" id="Icon / UsersRound">
         <path d={svgPaths.p197a0a00} id="Vector" stroke="var(--stroke-0, #FAFAFA)" strokeLinecap="round" strokeLinejoin="round" strokeOpacity="0.4" />
       </g>
       <defs>
         <clipPath id="clip0_1_6897">
-          <rect fill="white" height="16" width="16" />
+          <rect fill="white" height="24" width="24" />
         </clipPath>
       </defs>
     </Wrapper1>
@@ -279,13 +284,13 @@ function SidebarSidebarMenuSubItem3() {
 
 function IconMagnet() {
   return (
-    <Wrapper1 additionalClassNames="relative shrink-0">
+    <Wrapper1 additionalClassNames="relative shrink-0" viewBox="0 0 24 24">
       <g clipPath="url(#clip0_1_6888)" id="Icon / Magnet">
         <path d={svgPaths.p2c24930} id="Vector" stroke="var(--stroke-0, #FAFAFA)" strokeLinecap="round" strokeLinejoin="round" strokeOpacity="0.4" />
       </g>
       <defs>
         <clipPath id="clip0_1_6888">
-          <rect fill="white" height="16" width="16" />
+          <rect fill="white" height="24" width="24" />
         </clipPath>
       </defs>
     </Wrapper1>
@@ -383,13 +388,13 @@ function SidebarSidebarMenuItem2() {
 
 function IconCreditCard() {
   return (
-    <Wrapper1 additionalClassNames="relative shrink-0">
+    <Wrapper1 additionalClassNames="relative shrink-0" viewBox="0 0 24 24">
       <g clipPath="url(#clip0_1_6924)" id="Icon / CreditCard">
         <path d={svgPaths.p234f7800} id="Vector" stroke="var(--stroke-0, #FAFAFA)" strokeLinecap="round" strokeLinejoin="round" strokeOpacity="0.4" />
       </g>
       <defs>
         <clipPath id="clip0_1_6924">
-          <rect fill="white" height="16" width="16" />
+          <rect fill="white" height="24" width="24" />
         </clipPath>
       </defs>
     </Wrapper1>
@@ -407,13 +412,13 @@ function SidebarSidebarMenuSubItem7() {
 
 function IconSettings() {
   return (
-    <Wrapper1 additionalClassNames="relative shrink-0">
+    <Wrapper1 additionalClassNames="relative shrink-0" viewBox="0 0 24 24">
       <g clipPath="url(#clip0_1_6885)" id="Icon / Settings2">
         <path d={svgPaths.p3b0a8c00} id="Vector" stroke="var(--stroke-0, #FAFAFA)" strokeLinecap="round" strokeLinejoin="round" strokeOpacity="0.4" />
       </g>
       <defs>
         <clipPath id="clip0_1_6885">
-          <rect fill="white" height="16" width="16" />
+          <rect fill="white" height="24" width="24" />
         </clipPath>
       </defs>
     </Wrapper1>
@@ -431,13 +436,13 @@ function SidebarSidebarMenuSubItem8() {
 
 function IconLifeBuoy() {
   return (
-    <Wrapper1 additionalClassNames="relative shrink-0">
+    <Wrapper1 additionalClassNames="relative shrink-0" viewBox="0 0 24 24">
       <g clipPath="url(#clip0_1_6918)" id="Icon / LifeBuoy">
         <path d={svgPaths.pb0c6100} id="Vector" stroke="var(--stroke-0, #FAFAFA)" strokeLinecap="round" strokeLinejoin="round" strokeOpacity="0.4" />
       </g>
       <defs>
         <clipPath id="clip0_1_6918">
-          <rect fill="white" height="16" width="16" />
+          <rect fill="white" height="24" width="24" />
         </clipPath>
       </defs>
     </Wrapper1>
@@ -592,7 +597,7 @@ function IconPlus() {
   return (
     <Wrapper1 additionalClassNames="relative shrink-0">
       <g clipPath="url(#clip0_1_6927)" id="Icon / Plus">
-        <path d="M5 12H19M12 5V19" id="Vector" stroke="var(--stroke-0, #171717)" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.33" />
+        <path d="M3 8H13M8 3V13" id="Vector" stroke="var(--stroke-0, #171717)" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.33" />
       </g>
       <defs>
         <clipPath id="clip0_1_6927">

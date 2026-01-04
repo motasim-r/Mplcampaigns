@@ -1,4 +1,5 @@
 import svgPaths from "../../imports/svg-lfxnmi0o8i";
+import { useState } from "react";
 import { ShoppingCart, CreditCard, Clock, MessageSquare, Phone, Mail, Edit2, XCircle } from 'lucide-react';
 
 // Reusable components from the Dashboard
@@ -14,10 +15,14 @@ function Logo() {
   );
 }
 
-function Wrapper1({ children, additionalClassNames = "" }: React.PropsWithChildren<{ additionalClassNames?: string }>) {
+function Wrapper1({
+  children,
+  additionalClassNames = "",
+  viewBox = "0 0 16 16",
+}: React.PropsWithChildren<{ additionalClassNames?: string; viewBox?: string }>) {
   return (
     <div className={`size-[16px] ${additionalClassNames}`}>
-      <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 16 16">
+      <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox={viewBox}>
         {children}
       </svg>
     </div>
@@ -32,6 +37,37 @@ function Wrapper({ children }: React.PropsWithChildren<{}>) {
   );
 }
 
+type GlowToggleProps = {
+  enabled: boolean;
+  label: string;
+  onToggle: () => void;
+};
+
+function GlowToggle({ enabled, label, onToggle }: GlowToggleProps) {
+  return (
+    <button
+      type="button"
+      role="switch"
+      aria-checked={enabled}
+      aria-label={label}
+      onClick={onToggle}
+      className={`inline-flex h-6 w-11 items-center rounded-full border p-[2px] transition-all duration-200 ${
+        enabled
+          ? "justify-end bg-[#0f1a12] border-[#d8fe91]/60 shadow-[0_0_12px_rgba(216,254,145,0.35)]"
+          : "justify-start bg-[#121212] border-[#2a2a2a] shadow-[0_0_8px_rgba(82,82,82,0.2)]"
+      }`}
+    >
+      <span
+        className={`h-4 w-4 rounded-full transition-all duration-200 ${
+          enabled
+            ? "bg-[#d8fe91] shadow-[0_0_8px_rgba(216,254,145,0.7)]"
+            : "bg-[#737373] shadow-[0_0_6px_rgba(115,115,115,0.35)]"
+        }`}
+      />
+    </button>
+  );
+}
+
 function SidebarSidebarMenuSubItem10({ children, additionalClassNames = "" }: React.PropsWithChildren<{ additionalClassNames?: string }>) {
   return (
     <div className={`h-[28px] relative shrink-0 w-full ${additionalClassNames}`}>
@@ -42,7 +78,7 @@ function SidebarSidebarMenuSubItem10({ children, additionalClassNames = "" }: Re
 
 function IconLayoutDashboard() {
   return (
-    <Wrapper1 additionalClassNames="relative shrink-0">
+    <Wrapper1 additionalClassNames="relative shrink-0" viewBox="0 0 24 24">
       <g clipPath="url(#clip0_1_6912)" id="Icon / LayoutDashboard">
         <g id="Vector">
           <path d={svgPaths.p13b4cd00} stroke="#FAFAFA" strokeLinecap="round" strokeLinejoin="round" strokeOpacity="0.4" />
@@ -53,7 +89,7 @@ function IconLayoutDashboard() {
       </g>
       <defs>
         <clipPath id="clip0_1_6912">
-          <rect fill="white" height="16" width="16" />
+          <rect fill="white" height="24" width="24" />
         </clipPath>
       </defs>
     </Wrapper1>
@@ -72,13 +108,13 @@ function IconMegaphone() {
 
 function IconDatabaseZap() {
   return (
-    <Wrapper1 additionalClassNames="relative shrink-0">
+    <Wrapper1 additionalClassNames="relative shrink-0" viewBox="0 0 24 24">
       <g clipPath="url(#clip0_1_6909)" id="Icon / DatabaseZap">
         <path d={svgPaths.p39d46e80} id="Vector" stroke="#FAFAFA" strokeLinecap="round" strokeLinejoin="round" strokeOpacity="0.4" />
       </g>
       <defs>
         <clipPath id="clip0_1_6909">
-          <rect fill="white" height="16" width="16" />
+          <rect fill="white" height="24" width="24" />
         </clipPath>
       </defs>
     </Wrapper1>
@@ -87,13 +123,13 @@ function IconDatabaseZap() {
 
 function IconBarChart() {
   return (
-    <Wrapper1 additionalClassNames="relative shrink-0">
+    <Wrapper1 additionalClassNames="relative shrink-0" viewBox="0 0 24 24">
       <g clipPath="url(#clip0_1_6900)" id="Icon / BarChart">
         <path d="M12 20V10M18 20V4M6 20V16" id="Vector" stroke="#FAFAFA" strokeLinecap="round" strokeLinejoin="round" strokeOpacity="0.4" />
       </g>
       <defs>
         <clipPath id="clip0_1_6900">
-          <rect fill="white" height="16" width="16" />
+          <rect fill="white" height="24" width="24" />
         </clipPath>
       </defs>
     </Wrapper1>
@@ -102,13 +138,13 @@ function IconBarChart() {
 
 function IconUsersRound() {
   return (
-    <Wrapper1 additionalClassNames="relative shrink-0">
+    <Wrapper1 additionalClassNames="relative shrink-0" viewBox="0 0 24 24">
       <g clipPath="url(#clip0_1_6897)" id="Icon / UsersRound">
         <path d={svgPaths.p197a0a00} id="Vector" stroke="#FAFAFA" strokeLinecap="round" strokeLinejoin="round" strokeOpacity="0.4" />
       </g>
       <defs>
         <clipPath id="clip0_1_6897">
-          <rect fill="white" height="16" width="16" />
+          <rect fill="white" height="24" width="24" />
         </clipPath>
       </defs>
     </Wrapper1>
@@ -117,13 +153,13 @@ function IconUsersRound() {
 
 function IconMagnet() {
   return (
-    <Wrapper1 additionalClassNames="relative shrink-0">
+    <Wrapper1 additionalClassNames="relative shrink-0" viewBox="0 0 24 24">
       <g clipPath="url(#clip0_1_6888)" id="Icon / Magnet">
         <path d={svgPaths.p2c24930} id="Vector" stroke="#FAFAFA" strokeLinecap="round" strokeLinejoin="round" strokeOpacity="0.4" />
       </g>
       <defs>
         <clipPath id="clip0_1_6888">
-          <rect fill="white" height="16" width="16" />
+          <rect fill="white" height="24" width="24" />
         </clipPath>
       </defs>
     </Wrapper1>
@@ -142,13 +178,13 @@ function IconPlugZap() {
 
 function IconCreditCard() {
   return (
-    <Wrapper1 additionalClassNames="relative shrink-0">
+    <Wrapper1 additionalClassNames="relative shrink-0" viewBox="0 0 24 24">
       <g clipPath="url(#clip0_1_6924)" id="Icon / CreditCard">
         <path d={svgPaths.p234f7800} id="Vector" stroke="#FAFAFA" strokeLinecap="round" strokeLinejoin="round" strokeOpacity="0.4" />
       </g>
       <defs>
         <clipPath id="clip0_1_6924">
-          <rect fill="white" height="16" width="16" />
+          <rect fill="white" height="24" width="24" />
         </clipPath>
       </defs>
     </Wrapper1>
@@ -157,13 +193,13 @@ function IconCreditCard() {
 
 function IconSettings() {
   return (
-    <Wrapper1 additionalClassNames="relative shrink-0">
+    <Wrapper1 additionalClassNames="relative shrink-0" viewBox="0 0 24 24">
       <g clipPath="url(#clip0_1_6885)" id="Icon / Settings2">
         <path d={svgPaths.p3b0a8c00} id="Vector" stroke="#FAFAFA" strokeLinecap="round" strokeLinejoin="round" strokeOpacity="0.4" />
       </g>
       <defs>
         <clipPath id="clip0_1_6885">
-          <rect fill="white" height="16" width="16" />
+          <rect fill="white" height="24" width="24" />
         </clipPath>
       </defs>
     </Wrapper1>
@@ -172,13 +208,13 @@ function IconSettings() {
 
 function IconLifeBuoy() {
   return (
-    <Wrapper1 additionalClassNames="relative shrink-0">
+    <Wrapper1 additionalClassNames="relative shrink-0" viewBox="0 0 24 24">
       <g clipPath="url(#clip0_1_6918)" id="Icon / LifeBuoy">
         <path d={svgPaths.pb0c6100} id="Vector" stroke="#FAFAFA" strokeLinecap="round" strokeLinejoin="round" strokeOpacity="0.4" />
       </g>
       <defs>
         <clipPath id="clip0_1_6918">
-          <rect fill="white" height="16" width="16" />
+          <rect fill="white" height="24" width="24" />
         </clipPath>
       </defs>
     </Wrapper1>
@@ -199,7 +235,7 @@ function IconPlus() {
   return (
     <Wrapper1 additionalClassNames="relative shrink-0">
       <g clipPath="url(#clip0_1_6927)" id="Icon / Plus">
-        <path d="M5 12H19M12 5V19" id="Vector" stroke="#171717" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.33" />
+        <path d="M3 8H13M8 3V13" id="Vector" stroke="#171717" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.33" />
       </g>
       <defs>
         <clipPath id="clip0_1_6927">
@@ -383,6 +419,9 @@ function Sidebar() {
 }
 
 export default function CampaignsPage() {
+  const [isCartActive, setIsCartActive] = useState(true);
+  const [isCheckoutActive, setIsCheckoutActive] = useState(false);
+
   return (
     <div className="bg-[#0a0a0a] min-h-screen">
       <Sidebar />
@@ -415,7 +454,7 @@ export default function CampaignsPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6 max-w-[1280px]">
             {/* Cart Recovery Agent Card */}
             <div className="bg-[#1a1a1a] border border-[rgba(255,255,255,0.1)] rounded-[4px] p-5 hover:border-[#d8fe91]/30 transition-colors cursor-pointer">
-              <div className="flex items-start justify-between mb-4">
+              <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-[#d8fe91]/10 rounded-[4px] flex items-center justify-center">
                     <ShoppingCart className="w-5 h-5 text-[#d8fe91]" />
@@ -429,11 +468,22 @@ export default function CampaignsPage() {
                     </p>
                   </div>
                 </div>
-                <div className="flex items-center gap-1.5">
-                  <div className="w-1.5 h-1.5 bg-[#10b981] rounded-full"></div>
-                  <span className="text-[#10b981] text-[12px] font-['Overused_Grotesk:Medium',sans-serif]">
-                    Active
-                  </span>
+                <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-1.5">
+                    <div className={`w-1.5 h-1.5 rounded-full ${isCartActive ? "bg-[#10b981]" : "bg-[#525252]"}`}></div>
+                    <span
+                      className={`text-[12px] font-['Overused_Grotesk:Medium',sans-serif] ${
+                        isCartActive ? "text-[#10b981]" : "text-[#737373]"
+                      }`}
+                    >
+                      {isCartActive ? "Active" : "Paused"}
+                    </span>
+                  </div>
+                  <GlowToggle
+                    enabled={isCartActive}
+                    label="Toggle Cart Recovery Agent"
+                    onToggle={() => setIsCartActive(!isCartActive)}
+                  />
                 </div>
               </div>
               
@@ -470,7 +520,7 @@ export default function CampaignsPage() {
 
             {/* Checkout Recovery Agent Card */}
             <div className="bg-[#1a1a1a] border border-[rgba(255,255,255,0.1)] rounded-[4px] p-5 hover:border-[#d8fe91]/30 transition-colors cursor-pointer">
-              <div className="flex items-start justify-between mb-4">
+              <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-[#10b981]/10 rounded-[4px] flex items-center justify-center">
                     <CreditCard className="w-5 h-5 text-[#10b981]" />
@@ -483,6 +533,23 @@ export default function CampaignsPage() {
                       Recover checkout dropoffs with urgent outreach
                     </p>
                   </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-1.5">
+                    <div className={`w-1.5 h-1.5 rounded-full ${isCheckoutActive ? "bg-[#10b981]" : "bg-[#525252]"}`}></div>
+                    <span
+                      className={`text-[12px] font-['Overused_Grotesk:Medium',sans-serif] ${
+                        isCheckoutActive ? "text-[#10b981]" : "text-[#737373]"
+                      }`}
+                    >
+                      {isCheckoutActive ? "Active" : "Paused"}
+                    </span>
+                  </div>
+                  <GlowToggle
+                    enabled={isCheckoutActive}
+                    label="Toggle Checkout Recovery Agent"
+                    onToggle={() => setIsCheckoutActive(!isCheckoutActive)}
+                  />
                 </div>
               </div>
               
@@ -510,9 +577,13 @@ export default function CampaignsPage() {
                         Cart Recovery Agent
                       </h2>
                       <div className="flex items-center gap-1.5">
-                        <div className="w-1.5 h-1.5 bg-[#10b981] rounded-full"></div>
-                        <span className="text-[#10b981] text-[12px] font-['Overused_Grotesk:Medium',sans-serif]">
-                          Active
+                        <div className={`w-1.5 h-1.5 rounded-full ${isCartActive ? "bg-[#10b981]" : "bg-[#525252]"}`}></div>
+                        <span
+                          className={`text-[12px] font-['Overused_Grotesk:Medium',sans-serif] ${
+                            isCartActive ? "text-[#10b981]" : "text-[#737373]"
+                          }`}
+                        >
+                          {isCartActive ? "Active" : "Paused"}
                         </span>
                       </div>
                     </div>
