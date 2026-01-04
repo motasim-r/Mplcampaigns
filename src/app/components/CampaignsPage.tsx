@@ -1,6 +1,6 @@
 import svgPaths from "../../imports/svg-lfxnmi0o8i";
 import { useEffect, useRef, useState } from "react";
-import { ShoppingCart, CreditCard, Clock, MessageSquare, Phone, Mail, Edit2, XCircle, Search, MoreVertical, Zap, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ShoppingCart, Eye, MessageSquare, Phone, Mail, Edit2, XCircle, Search, MoreVertical, Zap, ChevronLeft, ChevronRight } from 'lucide-react';
 
 // Reusable components from the Dashboard
 function Logo() {
@@ -105,7 +105,7 @@ function MiniToggle({ enabled, label, onToggle }: MiniToggleProps) {
   );
 }
 
-type CampaignKey = "cart" | "checkout";
+type CampaignKey = "cart" | "browse";
 type CampaignStatus = "Live" | "Paused" | "Completed";
 type CampaignChannel = "email" | "sms" | "call";
 type CampaignRow = {
@@ -563,7 +563,7 @@ function Sidebar() {
 
 export default function CampaignsPage() {
   const [isCartActive, setIsCartActive] = useState(true);
-  const [isCheckoutActive, setIsCheckoutActive] = useState(false);
+  const [isBrowseActive, setIsBrowseActive] = useState(true);
   const [selectedCampaign, setSelectedCampaign] = useState<CampaignKey | null>(null);
   const detailRef = useRef<HTMLDivElement | null>(null);
   const [campaignRows, setCampaignRows] = useState<CampaignRow[]>(() => initialCampaignRows);
@@ -591,14 +591,27 @@ export default function CampaignsPage() {
     );
   };
   const isDetailVisible = selectedCampaign !== null;
-  const isCheckoutDetail = selectedCampaign === "checkout";
-  const detailIsActive = isCheckoutDetail ? isCheckoutActive : isCartActive;
-  const detailTitle = isCheckoutDetail ? "Checkout Recovery Agent" : "Cart Recovery Agent";
-  const detailDescription = isCheckoutDetail
-    ? "Recover checkout dropoffs with urgent outreach, timed nudges, and concise offer reminders that bring customers back quickly."
-    : "This AI agent monitors your store for abandoned carts and automatically reaches out to customers with personalized, behavior-aware messaging. It detects why customers abandoned (price sensitivity, distraction, or hesitation) and tailors the recovery approach accordingly.";
-  const detailAccentBg = isCheckoutDetail ? "bg-[#10b981]/10" : "bg-[#d8fe91]/10";
-  const detailAccentText = isCheckoutDetail ? "text-[#10b981]" : "text-[#d8fe91]";
+  const isBrowseDetail = selectedCampaign === "browse";
+  const detailIsActive = isBrowseDetail ? isBrowseActive : isCartActive;
+  const detailTitle = isBrowseDetail ? "Browse Abandonment Recovery" : "Cart Abandonment Recovery";
+  const detailDescription = isBrowseDetail
+    ? "Re-engages visitors who view products but leave without adding to cart."
+    : "Automatically messages shoppers who add items to cart but leave before checkout.";
+  const detailAccentBg = isBrowseDetail ? "bg-[#10b981]/10" : "bg-[#d8fe91]/10";
+  const detailAccentText = isBrowseDetail ? "text-[#10b981]" : "text-[#d8fe91]";
+  const detailMetrics = isBrowseDetail
+    ? {
+        revenue: "$8,920",
+        orders: "143",
+        conversion: "32%",
+        response: "18% response rate",
+      }
+    : {
+        revenue: "$12,450",
+        orders: "186",
+        conversion: "38%",
+        response: "24% response rate",
+      };
   const statusClasses: Record<CampaignStatus, string> = {
     Live: "bg-[#d8fe91]/15 text-[#d8fe91] border-[#d8fe91]/40",
     Paused: "bg-[#1f1b12] text-[#f59e0b] border-[#f59e0b]/40",
@@ -622,12 +635,6 @@ export default function CampaignsPage() {
                 Launch a campaign to connect with your audience in a way that feels personal and real.
               </p>
             </div>
-            <button className="bg-[#d8fe91] hover:bg-[#c5eb7e] text-[#171717] h-[36px] px-4 rounded-[4px] flex items-center gap-2 font-['Overused_Grotesk:Medium',sans-serif] text-[14px] transition-colors">
-              <IconPlus />
-              <div className="flex flex-col justify-center leading-[0]">
-                <p className="leading-[20px]">Create campaign</p>
-              </div>
-            </button>
           </div>
         </div>
 
@@ -635,22 +642,22 @@ export default function CampaignsPage() {
         <div className="p-6">
           {/* Campaign Cards Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6 max-w-[1280px]">
-            {/* Cart Recovery Agent Card */}
+            {/* Cart Abandonment Recovery Card */}
             <div
-              className="bg-[#1a1a1a] border border-[rgba(255,255,255,0.1)] rounded-[4px] p-5 hover:border-[#d8fe91]/30 transition-colors cursor-pointer"
+              className="bg-[#1a1a1a] border border-[rgba(255,255,255,0.1)] rounded-[4px] p-6 hover:border-[#d8fe91]/30 transition-colors cursor-pointer"
               onClick={() => handleCampaignSelect("cart")}
             >
-              <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center justify-between mb-5">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-[#d8fe91]/10 rounded-[4px] flex items-center justify-center">
                     <ShoppingCart className="w-5 h-5 text-[#d8fe91]" />
                   </div>
                   <div>
                     <h3 className="text-[#fafafa] font-['Overused_Grotesk:SemiBold',sans-serif] text-[16px] mb-1">
-                      Cart Recovery Agent
+                      Cart Abandonment Recovery
                     </h3>
                     <p className="text-[#a3a3a3] text-[14px] font-['Overused_Grotesk:Regular',sans-serif] leading-[20px]">
-                      Recover abandoned carts with AI-powered messaging
+                      Automatically messages shoppers who add items to cart but leave before checkout.
                     </p>
                   </div>
                 </div>
@@ -667,13 +674,13 @@ export default function CampaignsPage() {
                   </div>
                   <GlowToggle
                     enabled={isCartActive}
-                    label="Toggle Cart Recovery Agent"
+                    label="Toggle Cart Abandonment Recovery"
                     onToggle={() => setIsCartActive(!isCartActive)}
                   />
                 </div>
               </div>
               
-              <div className="flex items-center justify-between pt-4 border-t border-[rgba(255,255,255,0.05)]">
+              <div className="flex items-center justify-between pt-5 border-t border-[rgba(255,255,255,0.05)]">
                 <div>
                   <p className="text-[#737373] text-[12px] font-['Overused_Grotesk:Regular',sans-serif] leading-[20px] mb-0.5">
                     Recovered
@@ -713,49 +720,81 @@ export default function CampaignsPage() {
               </div>
             </div>
 
-            {/* Checkout Recovery Agent Card */}
+            {/* Browse Abandonment Recovery Card */}
             <div
-              className="bg-[#1a1a1a] border border-[rgba(255,255,255,0.1)] rounded-[4px] p-5 hover:border-[#d8fe91]/30 transition-colors cursor-pointer"
-              onClick={() => handleCampaignSelect("checkout")}
+              className="bg-[#1a1a1a] border border-[rgba(255,255,255,0.1)] rounded-[4px] p-6 hover:border-[#d8fe91]/30 transition-colors cursor-pointer"
+              onClick={() => handleCampaignSelect("browse")}
             >
-              <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center justify-between mb-5">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-[#10b981]/10 rounded-[4px] flex items-center justify-center">
-                    <CreditCard className="w-5 h-5 text-[#10b981]" />
+                    <Eye className="w-5 h-5 text-[#10b981]" />
                   </div>
                   <div>
                     <h3 className="text-[#fafafa] font-['Overused_Grotesk:SemiBold',sans-serif] text-[16px] mb-1">
-                      Checkout Recovery Agent
+                      Browse Abandonment Recovery
                     </h3>
                     <p className="text-[#a3a3a3] text-[14px] font-['Overused_Grotesk:Regular',sans-serif] leading-[20px]">
-                      Recover checkout dropoffs with urgent outreach
+                      Re-engages visitors who view products but leave without adding to cart.
                     </p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="flex items-center gap-1.5">
-                    <div className={`w-1.5 h-1.5 rounded-full ${isCheckoutActive ? "bg-[#10b981]" : "bg-[#525252]"}`}></div>
+                    <div className={`w-1.5 h-1.5 rounded-full ${isBrowseActive ? "bg-[#10b981]" : "bg-[#525252]"}`}></div>
                     <span
                       className={`text-[12px] font-['Overused_Grotesk:Medium',sans-serif] ${
-                        isCheckoutActive ? "text-[#10b981]" : "text-[#737373]"
+                        isBrowseActive ? "text-[#10b981]" : "text-[#737373]"
                       }`}
                     >
-                      {isCheckoutActive ? "Active" : "Paused"}
+                      {isBrowseActive ? "Active" : "Paused"}
                     </span>
                   </div>
                   <GlowToggle
-                    enabled={isCheckoutActive}
-                    label="Toggle Checkout Recovery Agent"
-                    onToggle={() => setIsCheckoutActive(!isCheckoutActive)}
+                    enabled={isBrowseActive}
+                    label="Toggle Browse Abandonment Recovery"
+                    onToggle={() => setIsBrowseActive(!isBrowseActive)}
                   />
                 </div>
               </div>
-              
-              <div className="flex items-center gap-2 pt-4 border-t border-[rgba(255,255,255,0.05)]">
-                <Clock className="w-4 h-4 text-[#10b981]" />
-                <span className="text-[#10b981] text-[14px] font-['Overused_Grotesk:Medium',sans-serif]">
-                  2-5 min response time
-                </span>
+
+              <div className="flex items-center justify-between pt-5 border-t border-[rgba(255,255,255,0.05)]">
+                <div>
+                  <p className="text-[#737373] text-[12px] font-['Overused_Grotesk:Regular',sans-serif] leading-[20px] mb-0.5">
+                    Recovered
+                  </p>
+                  <p className="text-[#fafafa] text-[18px] font-['Overused_Grotesk:SemiBold',sans-serif]">
+                    $8,920
+                  </p>
+                </div>
+                <div className="text-right">
+                  <p className="text-[#737373] text-[12px] font-['Overused_Grotesk:Regular',sans-serif] leading-[20px] mb-0.5">
+                    Orders
+                  </p>
+                  <p className="text-[#fafafa] text-[18px] font-['Overused_Grotesk:SemiBold',sans-serif]">
+                    143
+                  </p>
+                </div>
+                <div className="flex gap-1.5">
+                  <button
+                    className="w-7 h-7 rounded-[4px] bg-[#262626] hover:bg-[#333] flex items-center justify-center text-[#fafafa] transition-colors"
+                    onClick={(event) => event.stopPropagation()}
+                  >
+                    <MessageSquare className="w-3.5 h-3.5" />
+                  </button>
+                  <button
+                    className="w-7 h-7 rounded-[4px] bg-[#262626] hover:bg-[#333] flex items-center justify-center text-[#fafafa] transition-colors"
+                    onClick={(event) => event.stopPropagation()}
+                  >
+                    <Phone className="w-3.5 h-3.5" />
+                  </button>
+                  <button
+                    className="w-7 h-7 rounded-[4px] bg-[#262626] hover:bg-[#333] flex items-center justify-center text-[#fafafa] transition-colors"
+                    onClick={(event) => event.stopPropagation()}
+                  >
+                    <Mail className="w-3.5 h-3.5" />
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -777,6 +816,12 @@ export default function CampaignsPage() {
                     Your launched campaigns all in one place.
                   </p>
                 </div>
+                <button className="bg-[#d8fe91] hover:bg-[#c5eb7e] text-[#171717] h-[36px] px-4 rounded-[4px] flex items-center gap-2 font-['Overused_Grotesk:Medium',sans-serif] text-[14px] transition-colors">
+                  <IconPlus />
+                  <div className="flex flex-col justify-center leading-[0]">
+                    <p className="leading-[20px]">Create campaign</p>
+                  </div>
+                </button>
               </div>
             </div>
 
@@ -902,8 +947,8 @@ export default function CampaignsPage() {
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-3 flex-1">
                     <div className={`w-10 h-10 ${detailAccentBg} rounded-[4px] flex items-center justify-center shrink-0`}>
-                      {isCheckoutDetail ? (
-                        <CreditCard className={`w-5 h-5 ${detailAccentText}`} />
+                      {isBrowseDetail ? (
+                        <Eye className={`w-5 h-5 ${detailAccentText}`} />
                       ) : (
                         <ShoppingCart className={`w-5 h-5 ${detailAccentText}`} />
                       )}
@@ -952,7 +997,7 @@ export default function CampaignsPage() {
                   </p>
                 </div>
                 <p className="text-[#fafafa] text-[28px] font-['Overused_Grotesk:SemiBold',sans-serif] leading-[32px] mb-1">
-                  $12,450
+                  {detailMetrics.revenue}
                 </p>
                 <p className="text-[#737373] text-[14px] font-['Overused_Grotesk:Regular',sans-serif] leading-[20px]">
                   Last 30 days
@@ -967,7 +1012,7 @@ export default function CampaignsPage() {
                   </p>
                 </div>
                 <p className="text-[#fafafa] text-[28px] font-['Overused_Grotesk:SemiBold',sans-serif] leading-[32px] mb-1">
-                  186
+                  {detailMetrics.orders}
                 </p>
                 <p className="text-[#737373] text-[14px] font-['Overused_Grotesk:Regular',sans-serif] leading-[20px]">
                   $67 avg order
@@ -982,10 +1027,10 @@ export default function CampaignsPage() {
                   </p>
                 </div>
                 <p className="text-[#fafafa] text-[28px] font-['Overused_Grotesk:SemiBold',sans-serif] leading-[32px] mb-1">
-                  38%
+                  {detailMetrics.conversion}
                 </p>
                 <p className="text-[#737373] text-[14px] font-['Overused_Grotesk:Regular',sans-serif] leading-[20px]">
-                  24% response rate
+                  {detailMetrics.response}
                 </p>
               </div>
             </div>
