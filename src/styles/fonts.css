@@ -1,0 +1,43 @@
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+@font-face {
+  font-family: 'Overused Grotesk';
+  src: local('Inter');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Overused Grotesk';
+  src: local('Inter');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Overused Grotesk';
+  src: local('Inter');
+  font-weight: 600;
+  font-style: normal;
+}
+
+.font-\[\'Overused_Grotesk\:Regular\'\,sans-serif\] {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+}
+
+.font-\[\'Overused_Grotesk\:Medium\'\,sans-serif\] {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+}
+
+.font-\[\'Overused_Grotesk\:SemiBold\'\,sans-serif\] {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+}
+
+.font-\[\'Instrument_Serif\:Regular\'\,sans-serif\] {
+  font-family: 'Instrument Serif', serif;
+  font-weight: 400;
+}
